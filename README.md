@@ -191,6 +191,8 @@ Is 9600. If you don't meet it the board will not work. And there no way to chang
 
 If everuthing is right (WIFI and MQTT credentials for example) than the way to go is to check the ESP in operation inside the board. A nice thing in this board is 4 pins for VCC, GND, RX and TX. If you what to see the serial output from the ESP (and maybe error messages) you can connect your FTDI with the board: GND-GND, TX-RX, RX-TX. DISCLAIMER: DO NOT CONNECT THE VCC-VCC or your USB port can be damaged.
 
+![external rxtx](https://raw.githubusercontent.com/doleron/esp8266-1-channel-relay-board-with-mqtt/master/images/extenal_rxtx.JPG)
+
 ### My code doesn't work when I plug the Esp into the board - part 2
 
 Yes it is crazy but this board has a severe design issue: the ESP's Antenna is strongly atennuated by the board become unsable. Yes, when you plug the ESP in the board the ESP antenna doesn't work and the ESP cannot connect to the WIFI. it is crazy I know but I just brought the board, I didn't designed it. My workaround was to improvise a secondary antenna. Just connect a free jump in the RX connector and the ESP will be able to connect to your WIFI again.
@@ -201,6 +203,6 @@ An improvised antenna just in case if you have a hard day like my one today
 
 ## Acknowledgment
 
-I like to say thanks to the people on China whom have design and build so lovely device.
+I like to say thank you to the people on China whom have design and build so lovely device and make my day full of joy =D
 
 
