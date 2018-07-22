@@ -1,4 +1,4 @@
-# Esp8266-01 and 1-Channel Relay Board with MQTT
+# Esp8266-01/1-Channel Relay Board with MQTT
 
 Sketch to control an esp8266-01 STC 15f104W powered 1-channel relay board to be controlled remotely using a MQTT broker as communication bus.
 
@@ -156,5 +156,22 @@ void callback(char* topic, byte* payload, unsigned int length) {
 ```
 ## Troubleshooting
 
+Something in my bowels says that this troubleshooting section should be long. But I'll try to be short.
 
+### Power Source
+
+After programming the ESP you should to deploy it into the board and power up the board by a 5V reliable power source. In my tests I used a 2 Amp. The Esp itself drain energy and the Relay need enery as well to perform its mechanical operation. I don't tried to power the board just with the energy from the USB and I guess it is a bad idea even for test purposes.
+So, if the relay do not open/close one good shoot could be to check the power source.
+
+### The right serial baudrate
+
+Is 9600. If you don't meet it the board will not work. And there no way to change it.
+
+### My code doesn't work when I plug the Esp into the board - part 1
+
+If everuthing is right (WIFI and MQTT credentials for example) than the way to go is to check the ESP in operation inside the board. A nice thing in this board is 4 pins for VCC, GND, RX and TX. If you what to see the serial output from the ESP (and maybe error messages) you can connect your FTDI with the board: GND-GND, TX-RX, RX-TX. DISCLAIMER: DO NOT CONNECT THE VCC-VCC or your USB port can be damaged.
+
+### My code doesn't work when I plug the Esp into the board - part 2
+
+Yes it is crazy but this board has a severe design issue: the ESP's Antenna is strongly atennuated by the board become unsable. Yes, when you plug the ESP in the board the ESP antenna doesn't work and the ESP cannot connect to the WIFI. it is crazy I know but I just brought the board, I didn't designed it. My workaround was to improvise a secondary antenna. Just connect a free jump in the RX connector and the ESP will be able to connect to your WIFI again.
 
