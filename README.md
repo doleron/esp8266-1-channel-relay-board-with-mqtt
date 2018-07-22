@@ -1,4 +1,4 @@
-# Esp8266-01/1-Channel Relay Board with MQTT
+# Esp8266 1-Channel Relay Board with MQTT
 
 Sketch to control an esp8266-01 STC 15f104W powered 1-channel relay board to be controlled remotely using a MQTT broker as communication bus.
 
@@ -6,19 +6,29 @@ Sketch to control an esp8266-01 STC 15f104W powered 1-channel relay board to be 
 
 I bought this chinese board in a local retailer and the device was delivered whitout any kind of technical instructions. It have a single channel 10 Amp Relay and a slot to plug an Esp8266 into. Besides voltage regulators and other passive components, the board have a CHIP STC 15f104W with is responsible for receive commands from the esp and directly command the relay.
 
+![The board](https://raw.githubusercontent.com/doleron/esp8266-1-channel-relay-board-with-mqtt/master/images/relay_esp_board.JPG)
+
+## The Esp8266-01
+
+The Espressif Esp8266 01 is a revolutionary device that allows everyone build real IoT solutions at low cost. The one I have used in this example is the second generation of the model 01. It is compatible with the board slot layout and has 1 Mb of flash memory, a valuable resource to build customizable solutions and store persistent tracking records.
+
+![Esp8266 01](https://raw.githubusercontent.com/doleron/esp8266-1-channel-relay-board-with-mqtt/master/images/esp8266-01.JPG)
+
 ## Trying to use the board
+
+My first though when I was buying this device was: It should be easy to get up. Well, I was completely wrong. The leak of official documentation leave alone in an obscure journey of emptyness and doubt. After my searches I have found just two concrete (but ugly) alternatives. Luckly I found a way to get the device running as described below.
 
 ### Option 1 - Android App
 
-Digging in internet I found a bizarre MS Word document with messy instructions about how to control the board. According with this document, it is required to use a crapy android app to send AT commands to the ESP. Regarding the bad smell, this way wasn't an option for me since I wont to apply the board into a home automatation MQTT environment.
+Without even a device identification, I digging in internet to found a bizarre MS Word document with few and messy instructions about how to control the board. According this document, it is required to use a crapy android app to send AT commands to the ESP in order to make the relay switch. This way wasn't an option for me since I wont to apply the board into a home automatation MQTT environment.
 
-### Option 2 - physically change the board
+### Option 2 - Physically change the board
 
-Searching a bit more, I found another post instructions how to remove resistors and soudering jumps in order to control the relay "in regular fashion" by the PIN 2 bypassing the STC 15f104W. Again not an option for me since I don't like to change constructive features of the devices so intrusive in real applications.
+Searching a bit more, I found another post instructions explaining how to remove resistors and soudering jumps in order to control the relay "in regular fashion" by the PIN 2 bypassing the STC 15f104W. Again not an option for me since I don't like to change constructive devices features in so intrusive way for real applications.
 
-### Option 3 - the solution
+### Option 3 - The solution
 
-Reading the MS word document again I realized that the strings sent by the Android Application to the ESP into AT commands were basically forward through the RXTX interface to the board. To check my finds I wrote a straightforward application just to send these string:
+Reading the MS word document again I realized that the strings sent by the Android Application to the ESP (into AT commands) were basically forward through the RXTX interface to the board. To check my finds I wrote a straightforward application just to ESP send these strings to the board:
 
 ```
 void setup() {
@@ -35,13 +45,13 @@ void loop() {
   delay(2000);      
 }
 ```
-After uploaded the code to the ESP and plug it in the board the relay began to switch into the two states. Gotcha!
+After uploaded the code to the ESP and plug it in the board the relay began to switch into the two states every 2 seconds. Gotcha!
 
 Almost done, now let's plug it in the MQTT bus.
 
 ## Making the board a MQTT subscriber
 
-If you are familiar with MQTT platform, you know that each device can act as a publisher or a subscriber (or both). A publisher is something that inserts new message on the bus and a subscriber consome these messages. So in this architecture the board can act as a subscriber, receiving messages from the MQTT Broker. Thus, all messages sent for a specific 'topic' will be delivered to the board. For example, if the device subscribe to the topic "/myRelay-001/command", a message published by another MQTT client like:
+If you are familiar with MQTT platform, you know that each device can act as a publisher or a subscriber (or both). A publisher is something that inserts new messages into the bus and a subscriber consome these messages. So in this architecture the board can act as a subscriber, receiving messages from the MQTT Broker. Thus, all messages sent for a specific 'topic' will be delivered to the board. For example, if the board subscribe to the topic "/myRelay-001/command", a message published by another MQTT client like:
 
 ```
 $ mosquitto_pub -t "/myRelay-001/command" -u "myuser" -P "mypassword" -m "CLOSE"
@@ -167,6 +177,11 @@ So, if the relay do not open/close one good shoot could be to check the power so
 
 Every connection must be revised BEFORE you turn on your Power Supply. In some cases, like the TX-RX connection, inverted cables are just a temporary inconvenient: after you realized that the cables are switched just fix the connection and go on. But if you do a mistake with VCC and ground cables you mostly will damage your device seriously. So, take a breath and review your connection soonner.
 
+![power supply](https://raw.githubusercontent.com/doleron/esp8266-1-channel-relay-board-with-mqtt/master/images/powersupply.JPG)
+The power supply I have used. 
+
+Remember to review your connections BEFORE turn up the power. You have been warned.
+
 ### The right serial baudrate
 
 Is 9600. If you don't meet it the board will not work. And there no way to change this setting.
@@ -178,4 +193,7 @@ If everuthing is right (WIFI and MQTT credentials for example) than the way to g
 ### My code doesn't work when I plug the Esp into the board - part 2
 
 Yes it is crazy but this board has a severe design issue: the ESP's Antenna is strongly atennuated by the board become unsable. Yes, when you plug the ESP in the board the ESP antenna doesn't work and the ESP cannot connect to the WIFI. it is crazy I know but I just brought the board, I didn't designed it. My workaround was to improvise a secondary antenna. Just connect a free jump in the RX connector and the ESP will be able to connect to your WIFI again.
+
+![improvised antenna](https://raw.githubusercontent.com/doleron/esp8266-1-channel-relay-board-with-mqtt/master/images/improvised_antenna.JPG)
+A improvised antenna useful if you have a hard day like mine
 
