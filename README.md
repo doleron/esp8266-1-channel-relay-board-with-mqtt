@@ -158,14 +158,18 @@ void callback(char* topic, byte* payload, unsigned int length) {
 
 Something in my bowels says that this troubleshooting section should be long. But I'll try to be short.
 
-### Power Source
+### Power Supply
 
 After programming the ESP you should to deploy it into the board and power up the board by a 5V reliable power source. In my tests I used a 2 Amp. The Esp itself drain energy and the Relay need enery as well to perform its mechanical operation. I don't tried to power the board just with the energy from the USB and I guess it is a bad idea even for test purposes.
 So, if the relay do not open/close one good shoot could be to check the power source.
 
+### Cables
+
+Every connection must be revised BEFORE you turn on your Power Supply. In some cases, like the TX-RX connection, inverted cables are just a temporary inconvenient: after you realized that the cables are switched just fix the connection and go on. But if you do a mistake with VCC and ground cables you mostly will damage your device seriously. So, take a breath and review your connection soonner.
+
 ### The right serial baudrate
 
-Is 9600. If you don't meet it the board will not work. And there no way to change it.
+Is 9600. If you don't meet it the board will not work. And there no way to change this setting.
 
 ### My code doesn't work when I plug the Esp into the board - part 1
 
