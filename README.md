@@ -178,6 +178,7 @@ So, if the relay do not open/close one good shoot could be to check the power so
 Every connection must be revised BEFORE you turn on your Power Supply. In some cases, like the TX-RX connection, inverted cables are just a temporary inconvenient: after you realized that the cables are switched just fix the connection and go on. But if you do a mistake with VCC and ground cables you mostly will damage your device seriously. So, take a breath and review your connection soonner.
 
 ![power supply](https://raw.githubusercontent.com/doleron/esp8266-1-channel-relay-board-with-mqtt/master/images/powersupply.JPG)
+
 The power supply I have used. 
 
 Remember to review your connections BEFORE turn up the power. You have been warned.
@@ -195,5 +196,11 @@ If everuthing is right (WIFI and MQTT credentials for example) than the way to g
 Yes it is crazy but this board has a severe design issue: the ESP's Antenna is strongly atennuated by the board become unsable. Yes, when you plug the ESP in the board the ESP antenna doesn't work and the ESP cannot connect to the WIFI. it is crazy I know but I just brought the board, I didn't designed it. My workaround was to improvise a secondary antenna. Just connect a free jump in the RX connector and the ESP will be able to connect to your WIFI again.
 
 ![improvised antenna](https://raw.githubusercontent.com/doleron/esp8266-1-channel-relay-board-with-mqtt/master/images/improvised_antenna.JPG)
-An improvised antenna useful if you have a hard day like mine
+
+An improvised antenna just in case if you have a hard day like my one today
+
+## Acknowledgment
+
+I like to say thanks to the people on China whom have design and build so lovely device.
+
 
