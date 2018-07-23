@@ -8,7 +8,7 @@ I bought this chinese board from a local retailer. Surprising the device was del
 
 ![The board](https://raw.githubusercontent.com/doleron/esp8266-1-channel-relay-board-with-mqtt/master/images/relay_esp_board.JPG)
 
-The manufactor page is here: http://www.chinalctech.com/index.php?_m=mod_product&_a=view&p_id=1204
+The manufactor page is [here](http://www.chinalctech.com/index.php?_m=mod_product&_a=view&p_id=1204) 
 
 ## The Esp8266-01
 
@@ -24,7 +24,7 @@ My first though when I was buying this device was: It should be easy to get it u
 
 In manufactor page I found a link for the manual and instructions. But I couldn't find the material in the Baidu site where the link redirected me out:
 
-![The baidu link](https://raw.githubusercontent.com/doleron/esp8266-1-channel-relay-board-with-mqtt/master/images/baidu.JPG)
+![The baidu link](https://raw.githubusercontent.com/doleron/esp8266-1-channel-relay-board-with-mqtt/master/images/baidu.png)
 
 Without even a device identification, I digging in internet to found a bizarre MS Word document with few and messy instructions about how to control the board. According with this document, it is required to use a crapy android app to send AT commands to the ESP in order to make the relay switch. This way wasn't an option for me since I wont to apply the board into a home automatation MQTT environment. I have discarded the word doc but if you are interested I found a tutorial which seems to be just a copy of: https://www.hackster.io/makerrelay/esp8266-wifi-5v-1-channel-relay-delay-module-iot-smart-home-e8a437
 
@@ -70,7 +70,7 @@ The complete code can be found here in this repository. Anyway, the main points 
 
 ### Use the right headers
 
-Here you will need the both PubSubClient and the Esp8266 Wifi API. Look at the bottom of this document if you need assistance about how to configure the Esp or the MQTT libraries.
+Here you will need the both PubSubClient and the Esp8266 Wifi API. The PubSubClient library can be found [here](https://github.com/knolleary/pubsubclient). If you are starting with Esp8266 programming you can look for [tutorials like this one](https://randomnerdtutorials.com/how-to-install-esp8266-board-arduino-ide/) to setup the Arduino IDE with ESP libraries.
 
 ```
 #include <PubSubClient.h>
@@ -79,7 +79,7 @@ Here you will need the both PubSubClient and the Esp8266 Wifi API. Look at the b
 
 ### Create the client
 
-MQTT protocol runs in the top of the application layer of the TCP/IP network. you need a working Wifi network and credentials.
+MQTT protocol runs in the top of the application layer of the TCP/IP network and of course you need a working Wifi network and credentials in order ESP can connect in.
 
 ```
 WiFiClient wifiClient;
