@@ -22,7 +22,7 @@ My first though when I was buying this device was: It should be easy to get it u
 
 ### Option 1 - Android App
 
-In manufactor page I found a link for the manual and instructions. But I couldn't find the material in the Baidu site where the link redirected me out:
+In manufactor page I found a link for the manual and instructions. But I couldn't find the documents in the Baidu website where the link redirected me out:
 
 ![The baidu link](https://raw.githubusercontent.com/doleron/esp8266-1-channel-relay-board-with-mqtt/master/images/baidu.png)
 
@@ -57,12 +57,16 @@ Almost done, now we know how to control the relay so let's plug it in the MQTT b
 
 ## Making the board a MQTT subscriber
 
-If you are familiar with MQTT platform, you know that each device can act as a publisher or a subscriber (or both). A publisher is something that inserts new messages into the bus and a subscriber consome these messages. So in this architecture the board can act as a subscriber, receiving messages from the MQTT Broker. Thus, all messages sent for a specific 'topic' will be delivered to the board. For example, if the board subscribe to the topic "/myRelay-001/command", a message published by another MQTT client like:
+If you are familiar with MQTT platform, you know that each device can act as a publisher or a subscriber (or both). A publisher is something that inserts (or publishes) new messages into the bus (the MQTT broker). The message is labeled with a exclusive identifier called TOPIC. A subscriber client consome the messages but just the only ones sent for the TOPIC which it has been subscribe. Thus, the topic is like an address that the MQTT broker uses to deliver the right messages from the publishers to the subscribers.
+
+So, in this architecture, the board can act as a subscriber receiving messages from the MQTT Broker. Thus, all messages sent for a specific 'topic' will be delivered to the board. For example, if the board subscribe to the topic "/myRelay-001/command", a message published by another MQTT client like:
 
 ```
 $ mosquitto_pub -t "/myRelay-001/command" -u "myuser" -P "mypassword" -m "CLOSE"
 ```
 will be delivered to the board. So, the remain task is to write a subscriber MQTT client to receive that kind of message and responding in according (opening/closing).
+
+If you are new on MQTT a good point to start is to [install mosquitto on ubuntu 16.04](https://www.vultr.com/docs/how-to-install-mosquitto-mqtt-broker-server-on-ubuntu-16-04) and play with the embedded publish and subscriber clients.
 
 ## Coding the MQTT subscriber
 
