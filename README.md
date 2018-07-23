@@ -18,7 +18,7 @@ The Espressif Esp8266 model 01 is a revolutionary device that allows everyone bu
 
 ## Trying to use the board
 
-My first though when I was buying this device was: It should be easy to get it up. Well, I was completely wrong. The leak of official documentation leave me alone in an obscure journey of emptiness and doubt. After my searches I have found just two concrete (but ugly) alternatives: using a Android App to control the board or change the board's circuit to make it more friendly to use. Luckly I found a way to get the device running without Android App or soldering. I have described the three alternatives below.
+My first thought when I was buying this device was: It should be easy to get it up. Well, I was completely wrong. The absense of official documentation leave me alone in an obscure journey of emptiness and doubt. After my searches I have found just two concrete (but ugly) alternatives: using a Android App to control the board or change the board's circuit to make it more friendly to use. Luckly I found a way to get the device running without Android App or soldering. I have described the three alternatives below.
 
 ### Option 1 - Android App
 
