@@ -1,30 +1,36 @@
 # Esp8266 1-Channel Relay Board with MQTT
 
-Sketch to control an esp8266-01 STC 15f104W powered 1-channel relay board to be controlled remotely using a MQTT broker as communication bus.
+Sketch for an esp8266-01 STC 15f104W powered 1-channel relay board to be controlled remotely using a MQTT broker as communication bus.
 
 ## The board
 
-I bought this chinese board in a local retailer and the device was delivered whitout any kind of technical instructions. It have a single channel 10 Amp Relay and a slot to plug an Esp8266 into. Besides voltage regulators and other passive components, the board have a CHIP STC 15f104W with is responsible for receive commands from the esp and directly command the relay.
+I bought this chinese board from a local retailer. Surprising the device was delivered whitout any kind of technical instructions or manual. By the description in the retail online store, the board have a single channel Relay and a 8-pin slot to plug an Esp8266-01 into. Besides the voltage regulators and other passive components, the board is equiped with one STC 15f104W chip which is responsible for receive commands from the ESP and directly command the relay.
 
 ![The board](https://raw.githubusercontent.com/doleron/esp8266-1-channel-relay-board-with-mqtt/master/images/relay_esp_board.JPG)
 
+The manufactor page is here: http://www.chinalctech.com/index.php?_m=mod_product&_a=view&p_id=1204
+
 ## The Esp8266-01
 
-The Espressif Esp8266 01 is a revolutionary device that allows everyone build real IoT solutions at low cost. The one I have used in this example is the second generation of the model 01. It is compatible with the board slot layout and has 1 Mb of flash memory, a valuable resource to build customizable solutions and store persistent tracking records.
+The Espressif Esp8266 model 01 is a revolutionary device that allows everyone build real IoT solutions at low cost. The one I have used in this example is the second generation of the model 01. It is compatible with the board slot layout and has 1 Mb of flash memory, a valuable resource to build customizable solutions and store persistent tracking records.
 
 ![Esp8266 01](https://raw.githubusercontent.com/doleron/esp8266-1-channel-relay-board-with-mqtt/master/images/esp8266-01.JPG)
 
 ## Trying to use the board
 
-My first though when I was buying this device was: It should be easy to get up. Well, I was completely wrong. The leak of official documentation leave alone in an obscure journey of emptyness and doubt. After my searches I have found just two concrete (but ugly) alternatives. Luckly I found a way to get the device running as described below.
+My first though when I was buying this device was: It should be easy to get it up. Well, I was completely wrong. The leak of official documentation leave me alone in an obscure journey of emptiness and doubt. After my searches I have found just two concrete (but ugly) alternatives: using a Android App to control the board or change the board's circuit to make it more friendly to use. Luckly I found a way to get the device running without Android App or soldering. I have described the three alternatives below.
 
 ### Option 1 - Android App
 
-Without even a device identification, I digging in internet to found a bizarre MS Word document with few and messy instructions about how to control the board. According this document, it is required to use a crapy android app to send AT commands to the ESP in order to make the relay switch. This way wasn't an option for me since I wont to apply the board into a home automatation MQTT environment.
+In manufactor page I found a link for the manual and instructions. But I couldn't find the material in the Baidu site where the link redirected me out:
+
+![The baidu link](https://raw.githubusercontent.com/doleron/esp8266-1-channel-relay-board-with-mqtt/master/images/baidu.JPG)
+
+Without even a device identification, I digging in internet to found a bizarre MS Word document with few and messy instructions about how to control the board. According with this document, it is required to use a crapy android app to send AT commands to the ESP in order to make the relay switch. This way wasn't an option for me since I wont to apply the board into a home automatation MQTT environment. I have discarded the word doc but if you are interested I found a tutorial which seems to be just a copy of: https://www.hackster.io/makerrelay/esp8266-wifi-5v-1-channel-relay-delay-module-iot-smart-home-e8a437
 
 ### Option 2 - Physically change the board
 
-Searching a bit more, I found another post instructions explaining how to remove resistors and soudering jumps in order to control the relay "in regular fashion" by the PIN 2 bypassing the STC 15f104W. Again not an option for me since I don't like to change constructive devices features in so intrusive way for real applications.
+Searching a bit more, I found another [post instructions explaining how to remove resistors and soudering jumps](https://community.home-assistant.io/t/diy-cheap-3-esp8266-based-wifi-relay-switch-with-mqtt/40401) in order to control the relay "in regular fashion" by the PIN 2 bypassing the STC 15f104W. Again not an option for me since I don't like to change constructive devices features in so intrusive way for real applications.
 
 ### Option 3 - The solution
 
@@ -47,7 +53,7 @@ void loop() {
 ```
 After uploaded the code to the ESP and plug it in the board the relay began to switch into the two states every 2 seconds. Gotcha!
 
-Almost done, now let's plug it in the MQTT bus.
+Almost done, now we know how to control the relay so let's plug it in the MQTT bus.
 
 ## Making the board a MQTT subscriber
 
