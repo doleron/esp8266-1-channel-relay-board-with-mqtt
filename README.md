@@ -1,6 +1,6 @@
 # Esp8266 1-Channel Relay Board with MQTT
 
-Sketch for an esp8266-01 STC 15f104W powered 1-channel relay board to be controlled remotely using a MQTT broker as communication bus.
+Sketch for an Esp8266-01 STC 15f104W powered 1-channel relay board to be controlled remotely using a MQTT broker as communication bus.
 
 ## The board
 
