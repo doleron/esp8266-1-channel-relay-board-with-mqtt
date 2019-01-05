@@ -25,20 +25,20 @@ const uint8_t mqttQos        = 0; // At most once (0), At least once (1), Exactl
  * end of configuration
  */
 
+unsigned long lastOperation = 0;
+const long MIN_OPERATION_INTERVAL = 2000L;
+
+const char openString[] = "OPEN";
+const char closeString[] = "CLOSE";
+const byte closeCommand[] = {0xA0, 0x01, 0x01, 0xA2};
+const byte openCommand[] = {0xA0, 0x01, 0x00, 0xA1};
+
 #if ENABLE_HOMEASSISTANT
 char hassStateTopic[strlen(deviceId) + 5 + 1] = { 0 };             // Topic in will be: home/<deviceId>
 char hassCommandTopic[strlen(deviceId) + 5 + 8 + 1] = { 0 };       // Topic out will be: home/<deviceId>/command
 char hassDiscoveryTopic[strlen(deviceId) + 28 + 1] = { 0 };        // Topic hass will be: homeassistant/switch/<deviceId>/config
-char hassDiscoveryPayload[strlen(deviceId) * 3 + 107 + 1] = { 0 }; // Payload will be {\"name\":\"<deviceId>\",\"command_topic\":\"home/<deviceId>/command\",\"state_topic\":\"home/<deviceId>\",\"payload_off\":\"CLOSE\",\"payload_on\":\"OPEN\"}
+char hassDiscoveryPayload[strlen(deviceId) * 3 + strlen(openString) + strlen(closeString) + 98 + 1] = { 0 }; // Payload will be {\"name\":\"<deviceId>\",\"command_topic\":\"home/<deviceId>/command\",\"state_topic\":\"home/<deviceId>\",\"payload_off\":\"<closeString>\",\"payload_on\":\"<openString>\"}
 #endif // ENABLE_HOMEASSISTANT
-
-unsigned long lastOperation = 0;
-const long MIN_OPERATION_INTERVAL = 2000L;
-
-const String openString = "OPEN";
-const String closeString = "CLOSE";
-const byte closeCommand[] = {0xA0, 0x01, 0x01, 0xA2};
-const byte openCommand[] = {0xA0, 0x01, 0x00, 0xA1};
 
 AsyncMqttClient mqttClient;
 Ticker mqttReconnectTimer;
@@ -66,7 +66,9 @@ void setup() {
   snprintf(hassStateTopic,       sizeof(hassStateTopic),       "home/%s", deviceId);
   snprintf(hassCommandTopic,     sizeof(hassCommandTopic),     "home/%s/command", deviceId);
   snprintf(hassDiscoveryTopic,   sizeof(hassDiscoveryTopic),   "homeassistant/switch/%s/config", deviceId);
-  snprintf(hassDiscoveryPayload, sizeof(hassDiscoveryPayload), "{\"name\":\"%s\",\"command_topic\":\"home/%s/command\",\"state_topic\":\"home/%s\",\"payload_off\":\"CLOSE\",\"payload_on\":\"OPEN\"}", deviceId, deviceId, deviceId);
+  snprintf(hassDiscoveryPayload, sizeof(hassDiscoveryPayload),
+      "{\"name\":\"%s\",\"command_topic\":\"home/%s/command\",\"state_topic\":\"home/%s\",\"payload_off\":\"%s\",\"payload_on\":\"%s\"}",
+      deviceId, deviceId, deviceId, closeString, openString);
 #endif // ENABLE_HOMEASSISTANT
 
   connectToWifi();
@@ -144,7 +146,7 @@ void onMqttMessage(char* topic, char* payload, AsyncMqttClientMessageProperties 
 }
 
 void processMsg(char* payload, size_t len) {
-  if (len == openString.length() || len == closeString.length()) {
+  if (len == strlen(openString) || len == strlen(closeString)) {
     signed long now = millis();
     long deltaTime = now - lastOperation;
     if (deltaTime < MIN_OPERATION_INTERVAL) {
@@ -159,17 +161,17 @@ void processMsg(char* payload, size_t len) {
     Serial.print("  payload: ");
     Serial.println(message);
 
-    if(message == openString) {
+    if(message == String(openString)) {
       Serial.println("  -> Performing open command");
       Serial.write(openCommand, sizeof(openCommand));
 #if ENABLE_HOMEASSISTANT
-      mqttClient.publish(hassStateTopic, mqttQos, true, openString.c_str());
+      mqttClient.publish(hassStateTopic, mqttQos, true, openString);
 #endif // ENABLE_HOMEASSISTANT
-    } else if(message == closeString) {
+    } else if(message == String(closeString)) {
       Serial.println("  -> Performing close command");
       Serial.write(closeCommand, sizeof(closeCommand));
 #if ENABLE_HOMEASSISTANT
-      mqttClient.publish(hassStateTopic, mqttQos, true, closeString.c_str());
+      mqttClient.publish(hassStateTopic, mqttQos, true, closeString);
 #endif // ENABLE_HOMEASSISTANT
     }
     lastOperation = now;
@@ -194,7 +196,7 @@ void doHADiscovery() {
   Serial.println(hassDiscoveryTopic);
 
   // finally send default state
-  if (mqttClient.publish(hassStateTopic, mqttQos, true, closeString.c_str())) {
+  if (mqttClient.publish(hassStateTopic, mqttQos, true, closeString)) {
     Serial.print("HASS: successfully published to ");
   } else {
     Serial.print("HASS: failed to published to ");
