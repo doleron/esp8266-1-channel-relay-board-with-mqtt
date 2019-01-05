@@ -2,21 +2,35 @@
 #include <Ticker.h>
 #include <AsyncMqttClient.h>
 
+/*
+ * configurations
+ */
+
 #define WIFI_SSID "YOUR_WIFI_SSID"
 #define WIFI_PASSWORD "YOUR_WIFI_PASSWORD"
 
-const char mqttServer[]  = "192.168.1.20"; //change it for your MQTT server IP or network name
-const int mqttPort  = 1883; //1883 is the default port for MQTT. Change if necessary
-const char deviceId[]  = "myRelay-001"; //every device should have a different name
-const char commandTopic[]  = "/myRelay-001/command"; //the topic should be different for each device as well
-const char mqttUser[]  = "yourMQTTuser";
-const char mqttPassword[]  = "yourMQTTpassword";
-const uint8_t mqttQos = 0;
+// This enables MQTT auto discovery for Home Assistant
+#define ENABLE_HOMEASSISTANT 1
 
+const char deviceId[]     = "myRelay-001"; //every device should have a different name
+const char commandTopic[] = "/myRelay-001/command"; //the topic should be different for each device as well
+
+const char    mqttServer[]   = "192.168.1.20"; //change it for your MQTT server IP or network name
+const int     mqttPort       = 1883; //1883 is the default port for MQTT. Change if necessary
+const char    mqttUser[]     = "yourMQTTuser";
+const char    mqttPassword[] = "yourMQTTpassword";
+const uint8_t mqttQos        = 0; // At most once (0), At least once (1), Exactly once (2).
+
+/*
+ * end of configuration
+ */
+
+#if ENABLE_HOMEASSISTANT
 char hassStateTopic[strlen(deviceId) + 5 + 1] = { 0 };             // Topic in will be: home/<deviceId>
 char hassCommandTopic[strlen(deviceId) + 5 + 8 + 1] = { 0 };       // Topic out will be: home/<deviceId>/command
 char hassDiscoveryTopic[strlen(deviceId) + 28 + 1] = { 0 };        // Topic hass will be: homeassistant/switch/<deviceId>/config
 char hassDiscoveryPayload[strlen(deviceId) * 3 + 107 + 1] = { 0 }; // Payload will be {\"name\":\"<deviceId>\",\"command_topic\":\"home/<deviceId>/command\",\"state_topic\":\"home/<deviceId>\",\"payload_off\":\"CLOSE\",\"payload_on\":\"OPEN\"}
+#endif // ENABLE_HOMEASSISTANT
 
 unsigned long lastOperation = 0;
 const long MIN_OPERATION_INTERVAL = 2000L;
@@ -48,10 +62,12 @@ void setup() {
   if (mqttUser != "" or mqttPassword != "")
     mqttClient.setCredentials(mqttUser, mqttPassword);
 
+#if ENABLE_HOMEASSISTANT
   snprintf(hassStateTopic,       sizeof(hassStateTopic),       "home/%s", deviceId);
   snprintf(hassCommandTopic,     sizeof(hassCommandTopic),     "home/%s/command", deviceId);
   snprintf(hassDiscoveryTopic,   sizeof(hassDiscoveryTopic),   "homeassistant/switch/%s/config", deviceId);
   snprintf(hassDiscoveryPayload, sizeof(hassDiscoveryPayload), "{\"name\":\"%s\",\"command_topic\":\"home/%s/command\",\"state_topic\":\"home/%s\",\"payload_off\":\"CLOSE\",\"payload_on\":\"OPEN\"}", deviceId, deviceId, deviceId);
+#endif // ENABLE_HOMEASSISTANT
 
   connectToWifi();
 }
@@ -88,7 +104,9 @@ void onMqttConnect(bool sessionPresent) {
   Serial.println(sessionPresent);
 
   mqttClient.subscribe(commandTopic, mqttQos);
+#if ENABLE_HOMEASSISTANT
   doHADiscovery();
+#endif // ENABLE_HOMEASSISTANT
 }
 
 void onMqttDisconnect(AsyncMqttClientDisconnectReason reason) {
@@ -144,16 +162,21 @@ void processMsg(char* payload, size_t len) {
     if(message == openString) {
       Serial.println("  -> Performing open command");
       Serial.write(openCommand, sizeof(openCommand));
+#if ENABLE_HOMEASSISTANT
       mqttClient.publish(hassStateTopic, mqttQos, true, openString.c_str());
+#endif // ENABLE_HOMEASSISTANT
     } else if(message == closeString) {
       Serial.println("  -> Performing close command");
       Serial.write(closeCommand, sizeof(closeCommand));
+#if ENABLE_HOMEASSISTANT
       mqttClient.publish(hassStateTopic, mqttQos, true, closeString.c_str());
+#endif // ENABLE_HOMEASSISTANT
     }
     lastOperation = now;
   }
 }
 
+#if ENABLE_HOMEASSISTANT
 void doHADiscovery() {
   // subscribe to command topic
   if (mqttClient.subscribe(hassCommandTopic, mqttQos)) {
@@ -178,3 +201,4 @@ void doHADiscovery() {
   }
   Serial.println(hassCommandTopic);
 }
+#endif // ENABLE_HOMEASSISTANT
