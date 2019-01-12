@@ -68,7 +68,7 @@ void setup() {
   snprintf(hassDiscoveryTopic,   sizeof(hassDiscoveryTopic),   "homeassistant/switch/%s/config", deviceId);
   snprintf(hassDiscoveryPayload, sizeof(hassDiscoveryPayload),
       "{\"name\":\"%s\",\"command_topic\":\"home/%s/command\",\"state_topic\":\"home/%s\",\"payload_off\":\"%s\",\"payload_on\":\"%s\"}",
-      deviceId, deviceId, deviceId, closeString, openString);
+      deviceId, deviceId, deviceId, openString, closeString);
 #endif // ENABLE_HOMEASSISTANT
 
   connectToWifi();
@@ -196,7 +196,7 @@ void doHADiscovery() {
   Serial.println(hassDiscoveryTopic);
 
   // finally send default state
-  if (mqttClient.publish(hassStateTopic, mqttQos, true, closeString)) {
+  if (mqttClient.publish(hassStateTopic, mqttQos, true, openString)) {
     Serial.print("HASS: successfully published to ");
   } else {
     Serial.print("HASS: failed to published to ");
