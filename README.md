@@ -1,10 +1,10 @@
 # Esp8266 1-Channel Relay Board with MQTT
 
-Sketch for an Esp8266-01 STC 15f104W powered 1-channel relay board to be controlled remotely using a MQTT broker as communication bus without modify physically the device nor use third part andoid app.
+Sketch for an Esp8266-01 STC 15f104W powered 1-channel relay board to be controlled remotely using a MQTT broker as communication bus without modify physically the device nor by using any third part android app.
 
 ## The board
 
-I bought this chinese board from a local retailer. Surprising the device was delivered whitout any kind of technical instructions or manual. By the description in the retail online store, the board have a single channel Relay and a 8-pin slot to plug an Esp8266-01 into. Besides the voltage regulators and other passive components, the board is equiped with one STC 15f104W chip which is responsible for receive commands from the ESP and directly command the relay.
+I bought this chinese board from a local retailer. surprisingly or not the device was delivered whitout any kind of technical instructions nor manual. By the description in the retail's online store, I realized that the board have a single channel relay and a 8-pin slot to plug an esp8266-01 into. In addition to voltage regulators and other passive components, the board is equiped with one STC 15f104W chip which is responsible for receive commands from the ESP and directly command the relay.
 
 ![The board](https://raw.githubusercontent.com/doleron/esp8266-1-channel-relay-board-with-mqtt/master/images/relay_esp_board.JPG)
 
@@ -12,21 +12,21 @@ The manufactor page is [here](http://www.chinalctech.com/index.php?_m=mod_produc
 
 ## The Esp8266-01
 
-The Espressif Esp8266 model 01 is a revolutionary device that allows everyone build real IoT solutions at low cost. The one I have used in this example is the second generation of the model 01. It is compatible with the board slot layout and has 1 Mb of flash memory, a valuable resource to build customizable solutions and store persistent tracking records.
+The Espressif Esp8266 model 01 is a revolutionary device that allows everyone to build real IoT solutions at low cost. The one I have used in this example is the second generation of the model 01. This is compatible with the slot layout of the board and has 1 Mb of flash memory, a valuable resource to build customizable solutions and to store persistent tracking records.
 
 ![Esp8266 01](https://raw.githubusercontent.com/doleron/esp8266-1-channel-relay-board-with-mqtt/master/images/esp8266-01.JPG)
 
 ## Trying to use the board
 
-My first thought when I was buying this device was: It should be easy to get it up. Well, I was completely wrong. The absense of official documentation leave me alone in an obscure journey of emptiness and doubt. After my searches I have found just two concrete (but ugly) alternatives: using a Android App to control the board or change the board's circuit to make it more friendly to use. Luckly I found a way to get the device running without Android App or soldering. I have described the three alternatives below.
+My first thought when I was buying this device was: It should be easy to get it up. Well, I was completely wrong. The absense of official documentation leave me alone in an obscure journey of emptiness and doubt. After my searches I have found just two concrete (but ugly) alternatives: using an Android App to control the board or change the board's circuit to make it more friendly to use. Luckly I found a way to get the device running without any creppy Android App or soldering/desoldering. I have described the three alternatives below.
 
 ### Option 1 - Android App
 
-In manufactor page I found a link for the manual and instructions. But I couldn't find the documents in the Baidu website where the link redirected me out:
+In the manufactor page I found a link for the manual and instructions. But I couldn't find the documents in the Baidu website where the link redirected me out:
 
 ![The baidu link](https://raw.githubusercontent.com/doleron/esp8266-1-channel-relay-board-with-mqtt/master/images/baidu.png)
 
-Without even a device identification, I digging in internet to found a bizarre MS Word document with few and messy instructions about how to control the board. According with this document, it is required to use a crapy android app to send AT commands to the ESP in order to make the relay switch. This way wasn't an option for me since I wont to apply the board into a home automatation MQTT environment. I have discarded the word doc but if you are interested I found a tutorial which seems to be just a copy of: https://www.hackster.io/makerrelay/esp8266-wifi-5v-1-channel-relay-delay-module-iot-smart-home-e8a437
+Without even a device identification, I digging around the internet to found a bizarre MS Word document with few and messy instructions about how to control the board. According with this document, it is required to use a crapy android app to send AT commands to the ESP in order to make the relay to switch. This way wasn't an option for me since I have planned to apply the board into a home automatation MQTT environment. Thus, I have discarded the word doc but if you are interested I found a tutorial which seems to be just a copy of: https://www.hackster.io/makerrelay/esp8266-wifi-5v-1-channel-relay-delay-module-iot-smart-home-e8a437
 
 ### Option 2 - Physically change the board
 
@@ -34,7 +34,7 @@ Searching a bit more, I found another [post instructions explaining how to remov
 
 ### Option 3 - The solution
 
-Reading the MS word document again I realized that the strings sent by the Android Application to the ESP (into AT commands) were basically forward through the RXTX interface to the board. To check my finds I wrote a straightforward application just to ESP send these strings to the board:
+Reading the MS word document again I realized that the strings sent by the Android Application to the ESP (into AT commands) were basically forwarded throughout the RXTX interface to the board. To check my finds I wrote a straightforward application just to ESP send these strings to the board:
 
 ```
 void setup() {
@@ -213,6 +213,6 @@ An improvised antenna just in case if you have a hard day like my one today
 
 ## Acknowledgment
 
-I like to say thank you to the people on China whom have design and build so lovely device and make my day full of joy =D
+I like to say thank you to the people from China whom have design and build so lovely device and make my day full of joy =D
 
 
