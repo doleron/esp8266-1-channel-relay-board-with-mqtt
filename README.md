@@ -1,6 +1,15 @@
 # Esp8266 1-Channel Relay Board with MQTT
 
-Sketch for an Esp8266-01 STC 15f104W powered 1-channel relay board to be controlled remotely using a MQTT broker as communication bus without modify physically the device nor by using any third part android app.
+Sketches for an Esp8266-01 STC 15f104W powered 1-channel relay board to be controlled remotely using a MQTT broker as communication bus without modify physically the device nor by using any third part android app.
+
+TL;DR
+
+basic/basic.ino - simple file to make the board switch ON and OFF every ~2 seconds
+
+simple_mqtt/stc_15f104W.ino - example to use single relay board and a MQTT broker
+
+multi_relay/stc_15f104W.ino - code by @sehraf to allow use boards with 4 relays
+
 
 ## The board
 
