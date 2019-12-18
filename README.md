@@ -1,6 +1,6 @@
 # Esp8266 1-Channel Relay Board with MQTT
 
-Sketches for an Esp8266-01 STC 15f104W powered 1-channel relay board to be controlled remotely using a MQTT broker as communication bus without modify physically the device nor by using any third part android app.
+Sketches for an Esp8266-01 STC 15f104W powered 1-channel relay board to be controlled remotely using a MQTT broker as communication bus without modifying physically the device nor using any third part android app.
 
 TL;DR
 
@@ -13,37 +13,37 @@ multi_relay/stc_15f104W.ino - code by @sehraf to allow use boards with 4 relays
 
 ## The board
 
-I bought this chinese board from a local retailer. surprisingly or not the device was delivered whitout any kind of technical instructions nor manual. By the description in the retail's online store, I realized that the board have a single channel relay and a 8-pin slot to plug an esp8266-01 into. In addition to voltage regulators and other passive components, the board is equiped with one STC 15f104W chip which is responsible for receive commands from the ESP and directly command the relay.
+I bought this chinese board from a local retailer. Surprisingly or not the device was delivered whitout any kind of technical instructions nor manual. By the description in the retail's online store, I could realized that the board had a single channel relay and a 8-pin slot to plug an esp8266-01 into. In addition to voltage regulators and other passive components, the board is equiped with one STC 15f104W chip. STC 15f104W is a microcontroller and in this board it is responsible for receive commands from the ESP and directly command the relay.
 
 ![The board](https://raw.githubusercontent.com/doleron/esp8266-1-channel-relay-board-with-mqtt/master/images/relay_esp_board.JPG)
 
-The manufactor page is [here](http://www.chinalctech.com/index.php?_m=mod_product&_a=view&p_id=1204) 
+Manufactor page is [here](http://www.chinalctech.com/index.php?_m=mod_product&_a=view&p_id=1204) 
 
-## The Esp8266-01
+## Esp8266-01
 
-The Espressif Esp8266 model 01 is a revolutionary device that allows everyone to build real IoT solutions at low cost. The one I have used in this example is the second generation of the model 01. This is compatible with the slot layout of the board and has 1 Mb of flash memory, a valuable resource to build customizable solutions and to store persistent tracking records.
+Espressif Esp8266 model 01 is a revolutionary device that allows everyone to build real IoT solutions at low cost. The one I have used in this example is the second generation of model 01. It is compatible with board slot layout but it has 1 Mb of flash memory, a valuable resource to build customizable solutions and to store persistent tracking records.
 
 ![Esp8266 01](https://raw.githubusercontent.com/doleron/esp8266-1-channel-relay-board-with-mqtt/master/images/esp8266-01.JPG)
 
 ## Trying to use the board
 
-My first thought when I was buying this device was: It should be easy to get it up. Well, I was completely wrong. The absense of official documentation leave me alone in an obscure journey of emptiness and doubt. After my searches I have found just two concrete (but ugly) alternatives: using an Android App to control the board or change the board's circuit to make it more friendly to use. Luckly I found a way to get the device running without any creppy Android App or soldering/desoldering. I have described the three alternatives below.
+My first thought when I was buying this device was: It should be easy to get it up. Sadly, I was completely wrong. The absense of official documentation put me alone in an obscure journey of emptiness and doubt. After my searches I have found just two concrete (but terribly ugly) alternatives: using an Android App to control the board or changing the board circuit to make it more friendly to use. Hopefly, I found a way to get the device running without any creppy Android App or physical violation such as soldering or desoldering. The three alternatives below.
 
 ### Option 1 - Android App
 
-In the manufactor page I found a link for the manual and instructions. But I couldn't find the documents in the Baidu website where the link redirected me out:
+In manufactor page I found a link for manual and instructions. But I couldn't find documents in the Baidu website where the link redirected me out:
 
 ![The baidu link](https://raw.githubusercontent.com/doleron/esp8266-1-channel-relay-board-with-mqtt/master/images/baidu.png)
 
-Without even a device identification, I digging around the internet to found a bizarre MS Word document with few and messy instructions about how to control the board. According with this document, it is required to use a crapy android app to send AT commands to the ESP in order to make the relay to switch. This way wasn't an option for me since I have planned to apply the board into a home automatation MQTT environment. Thus, I have discarded the word doc but if you are interested I found a tutorial which seems to be just a copy of: https://www.hackster.io/makerrelay/esp8266-wifi-5v-1-channel-relay-delay-module-iot-smart-home-e8a437
+Without even a device identification, I digging around internet to found a bizarre MS Word document with few and messy instructions about how to control the board. According with this document, it is required to use a crapy android app to send AT commands to the ESP in order to make the relay to switch. This way wasn't an option for me since I have planned to apply the board into a home automatation MQTT environment. Thus, I have discarded the word doc but if you are interested I found a tutorial which seems to be just a copy of: https://www.hackster.io/makerrelay/esp8266-wifi-5v-1-channel-relay-delay-module-iot-smart-home-e8a437
 
 ### Option 2 - Physically change the board
 
-Searching a bit more, I found another [post instructions explaining how to remove resistors and soudering jumps](https://community.home-assistant.io/t/diy-cheap-3-esp8266-based-wifi-relay-switch-with-mqtt/40401) in order to control the relay "in regular fashion" by the PIN 2 bypassing the STC 15f104W. Again not an option for me since I don't like to change constructive devices features in so intrusive way for real applications.
+Searching a bit more, I found another [post instructions explaining how to remove resistors and soudering jumps](https://community.home-assistant.io/t/diy-cheap-3-esp8266-based-wifi-relay-switch-with-mqtt/40401) in order to control the relay "in regular fashion" by PIN 2 bypassing STC 15f104W. Again this wasn't an option for me since I don't like to change constructive devices features in so intrusive way, at least for real applications.
 
 ### Option 3 - The solution
 
-Reading the MS word document again I realized that the strings sent by the Android Application to the ESP (into AT commands) were basically forwarded throughout the RXTX interface to the board. To check my finds I wrote a straightforward application just to ESP send these strings to the board:
+Reading the MS word document again I realized that the strings sent by Android Application to the ESP (into AT commands) were basically forwarded throughout RXTX interface to the board. To check my assumptions I wrote a pretty straightforward application just to ESP send these strings to the board:
 
 ```
 void setup() {
@@ -60,7 +60,7 @@ void loop() {
   delay(2000);      
 }
 ```
-After uploaded the code to the ESP and plug it in the board the relay began to switch into the two states every 2 seconds. Gotcha!
+After uploaded the code to ESP and plug it in the board the relay began to switch into two states every 2 seconds. Gotcha!
 
 Almost done, now we know how to control the relay so let's plug it in the MQTT bus.
 
@@ -79,7 +79,7 @@ If you are new on MQTT a good point to start is to [install mosquitto on ubuntu 
 
 ## Coding the MQTT subscriber
 
-The complete code can be found here in this repository. Anyway, the main points are:
+Complete code can be found here in this repository. Anyway, the main points are explained for your convenience:
 
 ### Use the right headers
 
@@ -92,7 +92,7 @@ Here you will need the both PubSubClient and the Esp8266 Wifi API. The PubSubCli
 
 ### Create the client
 
-MQTT protocol runs in the top of the application layer of the TCP/IP network and of course you need a working Wifi network and credentials in order ESP can connect in.
+MQTT protocol runs in top of the application layer of TCP/IP network and of course you need a working Wifi network and credentials in order ESP can connect in.
 
 ```
 WiFiClient wifiClient;
@@ -108,7 +108,7 @@ The setup is pretty simple. Take attention to the Serial baudrate. It must be 96
   delay(10);
   Serial.println("Let' start now");
 ```
-The loop just verify the connection status and reconnects if necessary. Do not forget the ```client.loop()``` line otherwise your MQTT subscriber client will not be notified!
+The loop just verify the connection status and reconnects whenever necessary. Do not forget the ```client.loop()``` line otherwise your MQTT subscriber client will not be notified!
 
 ```
   if ( !client.connected() ) {
@@ -118,7 +118,7 @@ The loop just verify the connection status and reconnects if necessary. Do not f
 ```
 ### Connect as subscriber
 
-Here the most important aspects are the line ```client.subscribe(topic);``` which define the role of the client in the MQTT protocol as a subscribe; and the line ```client.setCallback(callback);``` that defines which function will be called on message arrives.
+Here one of most important aspect is the line ```client.subscribe(topic);``` which define the role of the client in the MQTT protocol as a subscribe; Also line ```client.setCallback(callback);``` that defines which function will be called out when a message arrives.
 
 ```
 void connect() {
@@ -150,7 +150,7 @@ void connect() {
 
 ### Write the callback function
 
-This is the callback function. The main task is unwrap the payload and check if is a OPEN or CLOSE operation. The code is pretty straighforward but one point of relevance must be highligted: you should to avoid consecutives OPEN-CLOSE operation in short time. Lets imagine that hundred of published messages arrives in the device every second. In this scenario the relay should be hundred of Open-Close operations in a short time. This scenario is dangerous since in each open operation is generate heat from the dissipation of the electrical current. The consecutives open-close cuycles can generate heat and start a fire. So, to avoi it, after each operation is stored the timestamp. Another operation is performed just in case the delta time is acceptable (the MIN_OPERATION_INTERVAL constant).
+This is the callback function. The main task is unwrap the payload and check if it is a OPEN or CLOSE operation. The code is pretty straighforward but one relevant point is: you should to avoid consecutives OPEN-CLOSE operation in short time. Let's imagine that hundred of published messages arrives in the device every second. In this scenario the relay will make hundred of Open-Close operations in a short time. This scenario is harmful. Consecutives open-close cycles will generate heat and maybe start fire. So, to avoi it, after each operation is stored the timestamp. Another operation is performed just in case the delta time is acceptable ( MIN_OPERATION_INTERVAL constant).
 
 ```
 unsigned long lastOperation;
@@ -185,36 +185,35 @@ void callback(char* topic, byte* payload, unsigned int length) {
 ```
 ## Troubleshooting
 
-Something in my bowels says that this troubleshooting section should be long. But I'll try to be short.
+Something in my head says that this troubleshooting section should be long. But I'll try to be short.
 
 ### Power Supply
 
-After programming the ESP you should to deploy it into the board and power up the board by a 5V reliable power source. In my tests I used a 2 Amp. The Esp itself drain energy and the Relay need enery as well to perform its mechanical operation. I don't tried to power the board just with the energy from the USB and I guess it is a bad idea even for test purposes.
-So, if the relay do not open/close one good shoot could be to check the power source.
+After programming ESP you should to connect it into the board and power up the board by a 5V reliable power source unit. In my tests I've used a 2 Amp PSU. Esp itself drain energy and the relay needs enery as well to perform its mechanical operation. I don't tried to power the board only using with the energy from USB port and I guess it is a bad idea even for test purposes.
+So, if relay do not open/close one good shoot could be to check the power source.
 
 ### Cables
 
-Every connection must be revised BEFORE you turn on your Power Supply. In some cases, like the TX-RX connection, inverted cables are just a temporary inconvenient: after you realized that the cables are switched just fix the connection and go on. But if you do a mistake with VCC and ground cables you mostly will damage your device seriously. So, take a breath and review your connection soonner.
+Every connection must be revised BEFORE you turn on your Power Supply. In some cases, like the TX-RX connection, inverted cables are just a temporary inconvenient: after you realized that the cables are switched just fix the connection and go on. But if you do a mistake with VCC and ground cables you will damage your device seriously. So, take a breath and review your connection.
 
 ![power supply](https://raw.githubusercontent.com/doleron/esp8266-1-channel-relay-board-with-mqtt/master/images/powersupply.JPG)
 
 The power supply I have used. 
 
-Remember to review your connections BEFORE turn up the power. You have been warned.
+DISCLAIMER: Remember to review your connections BEFORE turn up power.
 
 ### The right serial baudrate
 
 Is 9600. If you don't meet it the board will not work. And there no way to change this setting.
 
-### My code doesn't work when I plug the Esp into the board - part 1
-
-If everuthing is right (WIFI and MQTT credentials for example) than the way to go is to check the ESP in operation inside the board. A nice thing in this board is 4 pins for VCC, GND, RX and TX. If you what to see the serial output from the ESP (and maybe error messages) you can connect your FTDI with the board: GND-GND, TX-RX, RX-TX. DISCLAIMER: DO NOT CONNECT THE VCC-VCC or your USB port can be damaged.
+in
+If everything is right (WIFI and MQTT credentials for example) than the way to go is to check ESP in operation inside the board. A nice thing in this board is 4 pins for VCC, GND, RX and TX. If you want see serial output from ESP (and maybe error messages) you can connect your FTDI there: GND-GND, TX-RX, RX-TX. DISCLAIMER: DO NOT CONNECT VCC-VCC or your USB port can be damaged.
 
 ![external rxtx](https://raw.githubusercontent.com/doleron/esp8266-1-channel-relay-board-with-mqtt/master/images/extenal_rxtx.JPG)
 
-### My code doesn't work when I plug the Esp into the board - part 2
+### My code doesn't work when I plug Esp in the board - part 2
 
-Yes it is crazy but this board has a severe design issue: the ESP's Antenna is strongly atennuated by the board become unsable. Yes, when you plug the ESP in the board the ESP antenna doesn't work and the ESP cannot connect to the WIFI. it is crazy I know but I just brought the board, I didn't designed it. My workaround was to improvise a secondary antenna. Just connect a free jump in the RX connector and the ESP will be able to connect to your WIFI again.
+Yes it is crazy but this board has a severe design issue: the ESP Antenna is strongly atennuated by the board making it unsable. Yes, when you plug the ESP in the board the ESP antenna doesn't work and ESP cannot connect to WIFI. It is crazy I know but I just bought the board, I didn't designed it. My workaround was to improvise a secondary antenna. Just connect a free jump in RX connector and ESP will be able to connect to your WIFI again.
 
 ![improvised antenna](https://raw.githubusercontent.com/doleron/esp8266-1-channel-relay-board-with-mqtt/master/images/improvised_antenna.JPG)
 
@@ -222,6 +221,6 @@ An improvised antenna just in case if you have a hard day like my one today
 
 ## Acknowledgment
 
-I like to say thank you to the people from China whom have design and build so lovely device and make my day full of joy =D
+I like to say THANK YOU to people from China who have design and build so lovely device and make my day full of fun =D
 
 
