@@ -1,21 +1,20 @@
 # Esp8266 1-Channel Relay Board with MQTT
 
-Sketches for an Esp8266-01 STC 15f104W powered 1-channel relay board to be controlled remotely using a MQTT broker as communication bus without modifying physically the device nor using any third part android app.
+Sketches for an Esp8266-01 STC 15f104W powered 1-channel relay board to be controlled remotely using an MQTT broker as communication bus without modifying physically the device nor using any third part android app.
+
+![The board](https://raw.githubusercontent.com/doleron/esp8266-1-channel-relay-board-with-mqtt/master/images/relay_esp_board.JPG)
 
 TL;DR
 
-basic/basic.ino - simple file to make the board switch ON and OFF every ~2 seconds
+basic/basic.ino - simple file to make the board switch ON or OFF every ~2 seconds
 
-simple_mqtt/stc_15f104W.ino - example to use single relay board and a MQTT broker
+simple_mqtt/stc_15f104W.ino - example to use single relay board and an MQTT broker
 
-multi_relay/stc_15f104W.ino - code by @sehraf to allow use boards with 4 relays
-
+multi_relay/stc_15f104W.ino - code by @sehraf to allow using boards with 4 relays
 
 ## The board
 
-I bought this chinese board from a local retailer. Surprisingly or not the device was delivered whitout any kind of technical instructions nor manual. By the description in the retail's online store, I could realized that the board had a single channel relay and a 8-pin slot to plug an esp8266-01 into. In addition to voltage regulators and other passive components, the board is equiped with one STC 15f104W chip. STC 15f104W is a microcontroller and in this board it is responsible for receive commands from the ESP and directly command the relay.
-
-![The board](https://raw.githubusercontent.com/doleron/esp8266-1-channel-relay-board-with-mqtt/master/images/relay_esp_board.JPG)
+I bought this chinese board from a local retailer. Surprisingly or not the device was delivered to me whitout any sort of technical instructions. Following the description in the retail's online store, I realized that the board has a single channel relay and an 8-pin slot to plug an esp8266-01 into. In addition to voltage regulators and other passive components, the board is equipped with one STC 15f104W chip. STC 15f104W is a microcontroller and, in this board, this microcontroller is responsible for receive commands from the ESP and forward them to the relay.
 
 Manufactor page is [here](http://www.chinalctech.com/index.php?_m=mod_product&_a=view&p_id=1204) 
 
@@ -27,15 +26,15 @@ Espressif Esp8266 model 01 is a revolutionary device that allows everyone to bui
 
 ## Trying to use the board
 
-My first thought when I was buying this device was: It should be easy to get it up. Sadly, I was completely wrong. The absense of official documentation put me alone in an obscure journey of emptiness and doubt. After my searches I have found just two concrete (but terribly ugly) alternatives: using an Android App to control the board or changing the board circuit to make it more friendly to use. Hopefly, I found a way to get the device running without any creppy Android App or physical violation such as soldering or desoldering. The three alternatives below.
+My first thought when I buyed this device was: "It should be easy to set up". Sadly, I was completely wrong. The absense of official documentation put me alone in an obscure journey of emptiness and doubt. After my searches, I ended up with two concrete (but terribly ugly) alternatives: 1) using an crap Android App to control the board or 2) changing the board circuit to make it more friendly to use. Hopefuly, I found a way to get the device running without any Android App or physical violation such as soldering or desoldering. The three alternatives area explained below.
 
 ### Option 1 - Android App
 
-In manufactor page I found a link for manual and instructions. But I couldn't find documents in the Baidu website where the link redirected me out:
+In the manufactor page I actually found a link for a manual/instructions. But I couldn't find documents in the Baidu website where the link redirected me out:
 
 ![The baidu link](https://raw.githubusercontent.com/doleron/esp8266-1-channel-relay-board-with-mqtt/master/images/baidu.png)
 
-Without even a device identification, I digging around internet to found a bizarre MS Word document with few and messy instructions about how to control the board. According with this document, it is required to use a crapy android app to send AT commands to the ESP in order to make the relay to switch. This way wasn't an option for me since I have planned to apply the board into a home automatation MQTT environment. Thus, I have discarded the word doc but if you are interested I found a tutorial which seems to be just a copy of: https://www.hackster.io/makerrelay/esp8266-wifi-5v-1-channel-relay-delay-module-iot-smart-home-e8a437
+Without even a device identification, I digged around the internet finally finding a bizarre MS Word document with few and messy instructions about how to control the board. According to this document, it is required to use a crapy android app to send AT commands to the ESP in order to make the relay to switch. This way wasn't an option for me since I have planned to use the board into a home automatation MQTT environment. Thus, I have discarded the word doc. But if you are interested I found a tutorial which seems to be just a copy of it: https://www.hackster.io/makerrelay/esp8266-wifi-5v-1-channel-relay-delay-module-iot-smart-home-e8a437
 
 ### Option 2 - Physically change the board
 
